@@ -56,7 +56,7 @@ pipeline {
         stage('Run terraform') {
             steps {
                 dir('Terraform') {                
-                    git branch: 'master', url: 'https://github.com/Panda-Academy-Core-2-0/Terraform' /* to be updated */
+                    git branch: 'master', url: 'https://github.com/mdychton/Terraform.git'
                     withAWS(credentials:'827930805138', region: 'us-east-1') {
                             sh 'terraform init && terraform apply -auto-approve -var-file="terraform.tfvars"'
                     } 
