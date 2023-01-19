@@ -13,6 +13,19 @@ pipeline {
     tools {
         terraform 'Terraform'
     }
+
+    parameters {
+        string(name: 'backendDockerTag',
+               defaultValue: '',
+               description: 'Backend Docker image tag'
+        )
+        string(name: 'frontendDockerTag',
+               defaultValue: '',
+               description: 'Frontend Docker image tag'
+        )
+    }
+
+
     stages {
         stage {
             steps {
@@ -29,7 +42,6 @@ pipeline {
                 script{
                     backendDockerTag = params.backendDockerTag.isEmpty() ? "latest" : params.backendDockerTag
                     frontendDockerTag = params.frontendDockerTag.isEmpty() ? "latest" : params.frontendDockerTag
-                    
                     currentBuild.description = "Backend: ${backendDockerTag}, Frontend: ${frontendDockerTag}"
                 }
 
@@ -56,7 +68,7 @@ pipeline {
         stage('Run terraform') {
             steps {
                 dir('Terraform') {                
-                    git branch: 'master', url: 'https://github.com/mdychton/Terraform.git'
+                    git branch: 'master', url: 'https://github.com/mdychton/Terraform'
                     withAWS(credentials:'827930805138', region: 'us-east-1') {
                             sh 'terraform init && terraform apply -auto-approve -var-file="terraform.tfvars"'
                     } 
